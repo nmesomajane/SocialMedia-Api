@@ -6,12 +6,12 @@ const { Schema } = mongoose;
 
 
 const userSchema = new mongoose.Schema({
-    firstname: {
+    first_name: {
         type: String,
         required: [true, 'Please provide first name'],
         trim: true
     },
-    lastname: {
+    last_name: {
         type: String,
         required: [true, 'Please provide last name'],
         trim: true
@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         unique: true
     },
+     bio: {
+        type: String,
+        required: [true, 'Please provide a bio'],
+        trim: true
+    },
+     
     email: {
         type: String,
         required: [true, 'Please provide an email'],
@@ -54,6 +60,5 @@ userSchema.pre('save', async function() {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-const User = mongoose.model('User', userSchema);
-export default User;
+export default mongoose.model('User', userSchema);
 

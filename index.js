@@ -1,27 +1,32 @@
 import express from "express";
-import bodyParser from "body-parser";
+
 import mongoose from "mongoose";
 import cors from "cors";
 
 import dotenv from 'dotenv'
 import authRouter from "./src/routes/auth.js";
+import userRouter from "./src/routes/users.js";
+import errorHandler from "./src/middleware/errorHandler.js";
 
 
 dotenv.config()
 const app = express();
 
 
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 app.use(cors({
   origin: [ 'http://localhost:5173',  ,],
   credentials: true
 }));
 
-app.use('/api/auth', authRouter);
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', userRouter);
+
+
+app.use(errorHandler);
 
 
 app.get('/', (req, res) => {
