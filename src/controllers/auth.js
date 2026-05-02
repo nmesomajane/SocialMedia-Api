@@ -15,9 +15,9 @@ export const signUp = async (req, res, next) => {
             return res.status(400).json({ status: "error", message: "Request body is empty" })
         }
 
-        const { first_name, last_name, bio, email, password } = req.body
+      const { first_name, last_name, username, bio, email, password } = req.body
 
-        console.log("Signup attempt:", { email, first_name, last_name });
+        console.log("Signup attempt:", { email, first_name, last_name, username, bio });
         
         session = await mongoose.startSession()
         session.startTransaction()
@@ -30,15 +30,16 @@ export const signUp = async (req, res, next) => {
             throw error
         }
 
-        // Hash password before saving
-        const hashedPassword = await bcrypt.hash(password, 10)
+      
 
         const newUser = new User({
             first_name,
             last_name,
+              username,
             bio,
             email,
-            password: hashedPassword,
+            password,
+          
         })
 
         const savedUser = await newUser.save({ session })
@@ -79,12 +80,19 @@ export const signIn = async (req, res, next) => {
             throw error
         }
 
+         console.log("User authenticated:", { email: user.email, id: user._id })
+        console.log("Plain password from request:", password)
+        console.log("Hashed password from database:", user.password)
+        console.log("Password starts with $2b?", user.password.startsWith('$2b'))
+
         const isPasswordValid = await bcrypt.compare(password, user.password)
         if (!isPasswordValid) {
             const error = new Error("Invalid email or password")
             error.statusCode = 401
             throw error
         }
+
+       
 
         const token = jwt.sign(
             { userId: user._id },
