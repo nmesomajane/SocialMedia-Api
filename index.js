@@ -6,6 +6,7 @@ import cors from "cors";
 import dotenv from 'dotenv'
 import authRouter from "./src/routes/auth.js";
 import userRouter from "./src/routes/users.js";
+import postRouter from "./src/routes/post.js";
 import errorHandler from "./src/middleware/errorHandler.js";
 
 
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/posts', postRouter);
 
 
 app.use(errorHandler);
