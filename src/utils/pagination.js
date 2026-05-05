@@ -13,4 +13,4 @@ const paginate = async (model, query, options) => {
     pagination: { page, limit, total, pages: Math.ceil(total / limit) }
   };
 };
-module.exports = paginate;
+export default paginate;

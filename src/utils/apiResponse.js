@@ -6,4 +6,4 @@ class ApiResponse {
     return res.status(statusCode).json({ status: 'error', message });
   }
 }
-module.exports = ApiResponse;
+export default ApiResponse;
